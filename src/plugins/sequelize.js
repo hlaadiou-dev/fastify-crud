@@ -1,6 +1,6 @@
-import fp from 'fastify-plugin';
-import { Sequelize, DataTypes } from 'sequelize';
-import itemModel from '../models/item.js';
+import fp from "fastify-plugin";
+import { Sequelize, DataTypes } from "sequelize";
+import itemModel from "../models/item.js";
 
 export default fp(async (fastify, opts) => {
     const sequelize = new Sequelize(
@@ -10,16 +10,16 @@ export default fp(async (fastify, opts) => {
         {
             host: process.env.DB_HOST,
             port: process.env.DB_PORT,
-            dialect: 'mysql',
-            logging: true
+            dialect: "mysql",
+            logging: false,
         }
     );
 
     try {
         await sequelize.authenticate();
-        fastify.log.info('db connected');
+        fastify.log.info("db connected");
     } catch (err) {
-        fastify.log.error('db not connected:', err);
+        fastify.log.error("db not connected:", err);
         throw err;
     }
 
@@ -27,8 +27,10 @@ export default fp(async (fastify, opts) => {
 
     await sequelize.sync();
 
-    fastify.decorate('sequelize', sequelize);
-    fastify.decorate('models', { Item });
+    fastify.decorate("sequelize", sequelize);
+    fastify.decorate("models", { Item });
 
-    fastify.addHook('onClose', async () => { await sequelize.close(); });
+    fastify.addHook("onClose", async () => {
+        await sequelize.close();
+    });
 });
