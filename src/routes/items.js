@@ -1,4 +1,4 @@
-export default async function itemsRoutes(fastify, opts) {
+export default async function itemsRoutes(fastify) {
     const { Item } = fastify.models;
 
     const itemSchema = {

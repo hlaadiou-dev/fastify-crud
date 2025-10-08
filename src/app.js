@@ -10,7 +10,7 @@ app.register(itemsRoutes, { prefix: "/items" });
 
 const start = async () => {
     try {
-        app.listen({ port: process.env.PORT || 3000, host: "0.0.0.0" });
+        await app.listen({ port: process.env.PORT || 3000, host: "0.0.0.0" });
         app.log.info(`Server running on http://localhost:${process.env.PORT}`);
     } catch (err) {
         app.log.error(err);

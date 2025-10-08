@@ -1,19 +1,8 @@
 import fp from "fastify-plugin";
-import { Sequelize, DataTypes } from "sequelize";
-import itemModel from "../models/item.js";
+import models from "../models/index.cjs";
 
-export default fp(async (fastify, opts) => {
-    const sequelize = new Sequelize(
-        process.env.DB_NAME,
-        process.env.DB_USER,
-        process.env.DB_PASSWORD,
-        {
-            host: process.env.DB_HOST,
-            port: process.env.DB_PORT,
-            dialect: "mysql",
-            logging: false,
-        }
-    );
+export default fp(async (fastify) => {
+    const { sequelize, ...restModels } = models;
 
     try {
         await sequelize.authenticate();
@@ -23,12 +12,8 @@ export default fp(async (fastify, opts) => {
         throw err;
     }
 
-    const Item = itemModel(sequelize, DataTypes);
-
-    await sequelize.sync();
-
     fastify.decorate("sequelize", sequelize);
-    fastify.decorate("models", { Item });
+    fastify.decorate("models", restModels);
 
     fastify.addHook("onClose", async () => {
         await sequelize.close();
