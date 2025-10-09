@@ -10,12 +10,15 @@ stop:
 	docker compose stop
 
 down:
+	docker compose down
+
+reset:
 	docker compose down -v
 
 clean: down
 	docker system prune --force
 
-fclean: down
+fclean: reset
 	docker system prune --force --all --volumes
 
-re:	fclean all
+re:	down all

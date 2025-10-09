@@ -27,6 +27,17 @@ services:
             - /app/node_modules
         env_file:
             - .env
+    localstack:
+        image: localstack/localstack:4.9
+        container_name: localstack
+        ports:
+            - "4566:4566"
+        environment:
+            SERVICES: "s3"
+            DEBUG: "1"
+            AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+            AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+            AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
 
 volumes:
     db_data:
